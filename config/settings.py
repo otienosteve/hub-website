@@ -8,9 +8,7 @@ SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-me-31f59e52d4b
 DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "0"
 ALLOWED_HOSTS = os.environ.get(
     "DJANGO_ALLOWED_HOSTS",
-    "localhost,127.0.0.1,hub-website-mu.vercel.app",
-    "www.agenticai-hub.com",
-    "agenticai-hub.com"
+    "localhost,127.0.0.1,hub-website-mu.vercel.app,agenticai-hub.com,www.agenticai-hub.com",
 ).split(",")
 CSRF_TRUSTED_ORIGINS = [o for o in os.environ.get("DJANGO_CSRF_ORIGINS", "").split(",") if o]
 
