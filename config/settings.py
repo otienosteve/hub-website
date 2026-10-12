@@ -4,8 +4,10 @@ from pathlib import Path
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 import dj_database_url
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-me-31f59e52d4b5cd7add5f3a013818183f90cc50e26354903fda27dc3c6a27bdfabefore-deploying")
 DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "0"
