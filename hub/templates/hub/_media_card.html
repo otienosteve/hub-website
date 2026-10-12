@@ -1,0 +1,12 @@
+<article class="card media-card {{ m.orientation }}">
+  <a class="card-media" href="{{ m.get_absolute_url }}" aria-label="Watch {{ m.name }}">
+    {% include "hub/_image.html" with img=m.thumbnail obj=m alt=m.name %}
+    <span class="play" aria-hidden="true"></span>
+    <span class="platform">{{ m.get_platform_display }}</span>
+  </a>
+  <div class="card-body">
+    <h3><a href="{{ m.get_absolute_url }}">{{ m.name }}</a></h3>
+    <p>{{ m.description|truncatewords:20 }}</p>
+    <a class="link" href="{{ m.get_absolute_url }}">Watch</a>
+  </div>
+</article>

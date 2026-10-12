@@ -1,0 +1,28 @@
+{% extends "hub/base.html" %}
+{% block title %}{{ post.title }} · {{ site.org_name }}{% endblock %}
+{% block meta_description %}{{ post.description|truncatewords:30 }}{% endblock %}
+{% block content %}
+<article>
+  <header class="page-head"><div class="wrap narrow">
+    <a class="back" href="{% url 'hub:blog_list' %}">All posts</a>
+    <h1>{{ post.title }}</h1>
+    <p class="muted">By {{ post.author }} &middot; {{ post.date|date:"j F Y" }} &middot; {{ post.read_minutes }} min read</p>
+  </div></header>
+  <section class="section"><div class="wrap narrow">
+    {% if post.banner %}<img class="banner" src="{{ post.banner.url }}" alt="">{% endif %}
+    <p class="lede">{{ post.description }}</p>
+    <div class="prose article">
+      {% for kind, text in post.blocks %}{% if kind == "h2" %}<h2>{{ text }}</h2>{% else %}<p>{{ text|linebreaksbr }}</p>{% endif %}{% endfor %}
+    </div>
+  </div></section>
+</article>
+{% if more %}
+<section class="section section-white"><div class="wrap">
+  <div class="section-head"><h2>More to read</h2></div>
+  <div class="grid">{% for post in more %}
+    <article class="card"><div class="card-body"><p class="muted">{{ post.date|date:"j M Y" }} &middot; {{ post.author }}</p>
+    <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3><p>{{ post.description|truncatewords:22 }}</p></div></article>{% endfor %}
+  </div>
+</div></section>
+{% endif %}
+{% endblock %}

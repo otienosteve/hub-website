@@ -1,0 +1,13 @@
+{% extends "hub/base.html" %}
+{% block title %}Events · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>Events</h1><p class="lede">Workshops, meetups and demo days, listed in date order.</p></div></header>
+<section class="section"><div class="wrap">
+  <h2>Upcoming</h2>
+  <div class="grid">{% for e in upcoming %}{% include "hub/_event_card.html" %}{% empty %}<p class="empty">No upcoming events yet. Subscribe below to hear first.</p>{% endfor %}</div>
+  {% if past %}
+  <h2 class="gap-top">Past events</h2>
+  <div class="grid">{% for e in past %}{% include "hub/_event_card.html" %}{% endfor %}</div>
+  {% endif %}
+</div></section>
+{% endblock %}

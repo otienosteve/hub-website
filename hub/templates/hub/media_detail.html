@@ -1,0 +1,16 @@
+{% extends "hub/base.html" %}
+{% block title %}{{ item.name }} · {{ site.org_name }}{% endblock %}
+{% block meta_description %}{{ item.description|truncatewords:30 }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap narrow"><a class="back" href="{% url 'hub:media_list' %}">All media</a><h1>{{ item.name }}</h1>
+  <p class="muted">{{ item.get_platform_display }} &middot; {{ item.date|date:"j M Y" }} &middot; {{ item.orientation|capfirst }}</p></div></header>
+<section class="section"><div class="wrap narrow">
+  {% if item.embed_url %}
+    <div class="player {{ item.orientation }}"><iframe src="{{ item.embed_url }}" title="{{ item.name }}" loading="lazy" allow="accelerometer; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+  {% else %}
+    <div class="player {{ item.orientation }} player-ph">{% include "hub/_image.html" with img=item.thumbnail obj=item alt=item.name %}</div>
+  {% endif %}
+  <div class="prose"><p>{{ item.description|linebreaksbr }}</p></div>
+  <p class="actions"><a class="btn" href="{{ item.video_url }}" target="_blank" rel="noopener">Open on {{ item.get_platform_display }}</a></p>
+</div></section>
+{% endblock %}

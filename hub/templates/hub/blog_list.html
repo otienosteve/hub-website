@@ -1,0 +1,20 @@
+{% extends "hub/base.html" %}
+{% block title %}Blog · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>Blog</h1><p class="lede">Notes from the people building and teaching agentic AI.</p></div></header>
+<section class="section"><div class="wrap">
+  <div class="grid">
+  {% for post in posts %}
+  <article class="card">
+    <a class="card-media" href="{{ post.get_absolute_url }}" tabindex="-1" aria-hidden="true">{% include "hub/_image.html" with img=post.banner obj=post alt=post.title %}</a>
+    <div class="card-body">
+      <p class="muted">{{ post.date|date:"j M Y" }} &middot; {{ post.author }}</p>
+      <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+      <p>{{ post.description|truncatewords:28 }}</p>
+      <a class="link" href="{{ post.get_absolute_url }}">Read post</a>
+    </div>
+  </article>
+  {% empty %}<p class="empty">No posts yet.</p>{% endfor %}
+  </div>
+</div></section>
+{% endblock %}

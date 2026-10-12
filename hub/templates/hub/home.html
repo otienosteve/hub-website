@@ -1,0 +1,68 @@
+{% extends "hub/base.html" %}
+{% block join %}{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <h1>{{ site.hero_headline }}</h1>
+      <p class="lede">{{ site.hero_subheadline }}</p>
+      <p class="actions">
+        <a class="btn" href="{% url 'hub:course_list' %}">Explore courses</a>
+        <a class="btn btn-ghost" href="{% url 'hub:event_list' %}">See upcoming events</a>
+      </p>
+    </div>
+    <div class="hero-visual">
+      {% if site.hero_banner %}
+        <img class="hero-img" src="{{ site.hero_banner.url }}" alt="">
+      {% else %}
+      <svg class="loop" viewBox="0 0 400 400" role="img" aria-label="An agent loop: observe, plan, act, learn">
+        <circle cx="200" cy="200" r="130" fill="none" stroke="#14163A" stroke-width="2" stroke-dasharray="3 9" stroke-linecap="round"/>
+        <circle cx="200" cy="200" r="78" fill="#3347FF"/>
+        <text x="200" y="196" text-anchor="middle" class="loop-core">agent</text>
+        <text x="200" y="216" text-anchor="middle" class="loop-sub">goal in, work done</text>
+        <g class="node"><rect x="146" y="53" width="108" height="34" rx="17"/><text x="200" y="75" text-anchor="middle">Observe</text></g>
+        <g class="node"><rect x="294" y="183" width="86" height="34" rx="17"/><text x="337" y="205" text-anchor="middle">Plan</text></g>
+        <g class="node"><rect x="160" y="313" width="80" height="34" rx="17"/><text x="200" y="335" text-anchor="middle">Act</text></g>
+        <g class="node"><rect x="20" y="183" width="92" height="34" rx="17"/><text x="66" y="205" text-anchor="middle">Learn</text></g>
+        <circle r="9" fill="#FFB627" stroke="#14163A" stroke-width="2.5">
+          <animateMotion dur="10s" repeatCount="indefinite" path="M200,70 A130,130 0 1 1 199.99,70"/>
+        </circle>
+      </svg>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="section story">
+  <div class="wrap story-grid">
+    <h2>{{ site.story_title }}</h2>
+    <div class="prose">
+      {% for p in site.story_paragraphs %}<p>{{ p }}</p>{% empty %}<p>Add your organisation's story in the admin under Site settings.</p>{% endfor %}
+      <a class="link" href="{% url 'hub:about' %}">More about us</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section-white">
+  <div class="wrap">
+    <div class="section-head"><h2>Courses</h2><a class="link" href="{% url 'hub:course_list' %}">All courses</a></div>
+    <div class="grid">{% for c in courses %}{% include "hub/_course_card.html" %}{% empty %}<p class="empty">Courses will be listed here soon.</p>{% endfor %}</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="wrap">
+    <div class="section-head"><h2>Upcoming events</h2><a class="link" href="{% url 'hub:event_list' %}">All events</a></div>
+    <div class="grid">{% for e in events %}{% include "hub/_event_card.html" %}{% empty %}<p class="empty">No events scheduled right now. Join the newsletter to hear first.</p>{% endfor %}</div>
+  </div>
+</section>
+
+{% include "hub/_join.html" %}
+
+<section class="section section-white">
+  <div class="wrap">
+    <div class="section-head"><h2>From our media</h2><a class="link" href="{% url 'hub:media_list' %}">All media</a></div>
+    <div class="grid media-grid">{% for m in media_items %}{% include "hub/_media_card.html" %}{% empty %}<p class="empty">Videos and social clips will appear here.</p>{% endfor %}</div>
+  </div>
+</section>
+{% endblock %}

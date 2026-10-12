@@ -1,0 +1,13 @@
+<article class="card event-card">
+  <div class="event-top">
+    <div class="datebox"><span class="d">{{ e.date|date:"j" }}</span><span class="m">{{ e.date|date:"M" }}</span></div>
+    <div class="thumb">{% include "hub/_image.html" with img=e.photo obj=e alt=e.title %}</div>
+  </div>
+  <div class="card-body">
+    <h3><a href="{{ e.get_absolute_url }}">{{ e.title }}</a></h3>
+    <p class="muted">{{ e.date|date:"D j M, g:i A" }}{% if e.location %} &middot; {{ e.location }}{% endif %}</p>
+    <p>{{ e.description|truncatewords:22 }}</p>
+    {% if e.tag_list %}<p class="chips">{% for t in e.tag_list %}<span class="chip chip-soft">{{ t }}</span>{% endfor %}</p>{% endif %}
+    <a class="link" href="{{ e.get_absolute_url }}">View event</a>
+  </div>
+</article>

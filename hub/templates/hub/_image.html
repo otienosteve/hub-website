@@ -1,0 +1,1 @@
+{% load hub_extras %}{% if img %}<img src="{{ img.url }}" alt="{{ alt|default:'' }}" loading="lazy">{% else %}<div class="ph ph-{{ obj|tone }}" role="img" aria-label="{{ alt|default:'' }}"></div>{% endif %}

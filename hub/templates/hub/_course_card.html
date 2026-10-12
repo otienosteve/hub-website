@@ -1,0 +1,10 @@
+<article class="card">
+  <a class="card-media" href="{{ c.get_absolute_url }}" tabindex="-1" aria-hidden="true">{% include "hub/_image.html" with img=c.cover obj=c alt=c.title %}</a>
+  <div class="card-body">
+    <p class="chips"><span class="chip">{{ c.duration_display }}</span>
+      <span class="chip chip-soft">{% if c.next_cohort_display %}Next cohort {{ c.next_cohort_display|date:"j M Y" }}{% else %}Cohort on request{% endif %}</span></p>
+    <h3><a href="{{ c.get_absolute_url }}">{{ c.title }}</a></h3>
+    <p>{{ c.summary|truncatewords:26 }}</p>
+    <a class="link" href="{{ c.get_absolute_url }}">Open course</a>
+  </div>
+</article>

@@ -1,0 +1,37 @@
+{% extends "hub/base.html" %}
+{% block title %}About · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>About {{ site.org_name }}</h1><p class="lede">{{ site.tagline }}</p></div></header>
+
+<section class="section"><div class="wrap two-up">
+  <div class="panel panel-blue"><h2>Mission</h2><p>{{ site.mission|default:"Add your mission in Site settings."|linebreaksbr }}</p></div>
+  <div class="panel panel-gold"><h2>Vision</h2><p>{{ site.vision|default:"Add your vision in Site settings."|linebreaksbr }}</p></div>
+</div></section>
+
+{% if values %}
+<section class="section section-white"><div class="wrap">
+  <div class="section-head"><h2>Core values</h2></div>
+  <div class="grid values">{% for v in values %}<div class="card card-body"><h3>{{ v.title }}</h3><p>{{ v.description }}</p></div>{% endfor %}</div>
+</div></section>
+{% endif %}
+
+{% if team %}
+<section class="section"><div class="wrap">
+  <div class="section-head"><h2>The team</h2></div>
+  <div class="grid team">{% for m in team %}
+    <article class="member">
+      <div class="avatar">{% if m.photo %}<img src="{{ m.photo.url }}" alt="{{ m.name }}" loading="lazy">{% else %}<span>{{ m.initials }}</span>{% endif %}</div>
+      <h3>{{ m.name }}</h3><p class="role">{{ m.role }}</p>
+      {% if m.bio %}<p>{{ m.bio }}</p>{% endif %}
+      {% if m.linkedin_url %}<a class="link" href="{{ m.linkedin_url }}" target="_blank" rel="noopener">LinkedIn</a>{% endif %}
+    </article>{% endfor %}
+  </div>
+</div></section>
+{% endif %}
+
+{% for s in sections %}
+<section class="section {% cycle 'section-white' '' %}"><div class="wrap story-grid">
+  <h2>{{ s.title }}</h2><div class="prose">{% for p in s.paragraphs %}<p>{{ p }}</p>{% endfor %}</div>
+</div></section>
+{% endfor %}
+{% endblock %}

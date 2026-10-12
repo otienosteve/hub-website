@@ -1,0 +1,19 @@
+<section class="join" id="join">
+  <div class="wrap join-inner">
+    <div class="join-copy">
+      <h2>Stay in the loop, or become a member</h2>
+      <p>Get the newsletter for new courses, event invitations and what we're building. Tick the box if you'd like to hear about membership too.</p>
+    </div>
+    <div>
+      {% if messages %}{% for m in messages %}<p class="flash flash-{{ m.level_tag }}" role="status">{{ m }}</p>{% endfor %}{% endif %}
+      <form class="join-form" method="post" action="{% url 'hub:subscribe' %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <label>Name <input type="text" name="name" autocomplete="name" placeholder="Your name"></label>
+        <label>Email <input type="email" name="email" required autocomplete="email" placeholder="you@example.com"></label>
+        <label class="check"><input type="checkbox" name="wants_membership"> I'm interested in membership</label>
+        <button class="btn btn-gold" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </div>
+</section>

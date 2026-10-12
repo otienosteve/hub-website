@@ -1,0 +1,8 @@
+{% extends "hub/base.html" %}
+{% block title %}Courses · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>Courses</h1><p class="lede">Practical, instructor-led training for building and deploying AI agents.</p></div></header>
+<section class="section"><div class="wrap">
+  <div class="grid">{% for c in courses %}{% include "hub/_course_card.html" %}{% empty %}<p class="empty">No courses published yet.</p>{% endfor %}</div>
+</div></section>
+{% endblock %}

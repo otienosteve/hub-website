@@ -1,0 +1,20 @@
+{% extends "hub/base.html" %}
+{% block title %}Portfolio · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>Our work</h1><p class="lede">Agents, tools and training programmes we've delivered with partners.</p></div></header>
+<section class="section"><div class="wrap">
+  <div class="grid">
+  {% for p in projects %}
+  <article class="card">
+    <div class="card-media">{% include "hub/_image.html" with img=p.image obj=p alt=p.title %}</div>
+    <div class="card-body">
+      <p class="muted">{% if p.client %}{{ p.client }} &middot; {% endif %}{{ p.year }}</p>
+      <h3>{{ p.title }}</h3><p>{{ p.description|truncatewords:34 }}</p>
+      {% if p.tag_list %}<p class="chips">{% for t in p.tag_list %}<span class="chip chip-soft">{{ t }}</span>{% endfor %}</p>{% endif %}
+      {% if p.link %}<a class="link" href="{{ p.link }}" target="_blank" rel="noopener">View project</a>{% endif %}
+    </div>
+  </article>
+  {% empty %}<p class="empty">Projects will be showcased here.</p>{% endfor %}
+  </div>
+</div></section>
+{% endblock %}

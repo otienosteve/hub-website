@@ -1,0 +1,28 @@
+{% extends "hub/base.html" %}
+{% block title %}{{ course.title }} · {{ site.org_name }}{% endblock %}
+{% block meta_description %}{{ course.summary|truncatewords:30 }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap">
+  <a class="back" href="{% url 'hub:course_list' %}">All courses</a>
+  <h1>{{ course.title }}</h1><p class="lede">{{ course.summary }}</p>
+</div></header>
+<section class="section"><div class="wrap detail-grid">
+  <div>
+    <h2>What you'll cover</h2>
+    <ol class="topics">
+      {% for t in course.topics.all %}<li><h3>{{ t.title }}</h3>{% if t.description %}<p>{{ t.description }}</p>{% endif %}</li>{% empty %}<li><p class="muted">Topics will be added soon.</p></li>{% endfor %}
+    </ol>
+  </div>
+  <aside class="factbox">
+    <dl>
+      <dt>Duration</dt><dd>{{ course.duration_display }}{% if course.duration_days > 5 %} <span class="muted">({{ course.duration_days }} days)</span>{% endif %}</dd>
+      <dt>Next cohort</dt><dd>{% if course.next_cohort_display %}{{ course.next_cohort_display|date:"j F Y" }}{% else %}On request{% endif %}</dd>
+      <dt>Prerequisites</dt>
+      <dd>{% if course.prerequisite_list %}<ul class="ticks">{% for p in course.prerequisite_list %}<li>{{ p }}</li>{% endfor %}</ul>{% else %}None. Beginners welcome.{% endif %}</dd>
+    </dl>
+    {% if course.enrol_url %}<a class="btn" href="{{ course.enrol_url }}" rel="noopener">Enrol now</a>
+    {% elif site.contact_email %}<a class="btn" href="mailto:{{ site.contact_email }}?subject={% if course.next_cohort_display %}Enrolment{% else %}Cohort request{% endif %}: {{ course.title|urlencode }}">{% if course.next_cohort_display %}Enrol now{% else %}Request a cohort{% endif %}</a>
+    {% else %}<a class="btn" href="#join">Get notified</a>{% endif %}
+  </aside>
+</div></section>
+{% endblock %}

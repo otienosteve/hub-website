@@ -1,0 +1,23 @@
+{% extends "hub/base.html" %}
+{% block title %}{{ event.title }} · {{ site.org_name }}{% endblock %}
+{% block meta_description %}{{ event.description|truncatewords:30 }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap">
+  <a class="back" href="{% url 'hub:event_list' %}">All events</a>
+  <h1>{{ event.title }}</h1>
+  <p class="lede">{{ event.date|date:"l j F Y, g:i A" }}{% if event.end_date %} to {{ event.end_date|date:"g:i A" }}{% endif %}{% if event.location %} &middot; {{ event.location }}{% endif %}</p>
+  {% if event.tag_list %}<p class="chips">{% for t in event.tag_list %}<span class="chip chip-soft">{{ t }}</span>{% endfor %}</p>{% endif %}
+</div></header>
+<section class="section"><div class="wrap narrow">
+  {% if event.banner %}<img class="banner" src="{{ event.banner.url }}" alt="">{% endif %}
+  <div class="prose"><p>{{ event.description|linebreaksbr }}</p></div>
+  {% if event.highlights.all %}
+  <h2>Highlights</h2>
+  <ul class="ticks big">{% for h in event.highlights.all %}<li>{{ h.text }}</li>{% endfor %}</ul>
+  {% endif %}
+  <p class="actions">
+    {% if event.registration_url and event.is_upcoming %}<a class="btn" href="{{ event.registration_url }}" rel="noopener">Register</a>{% endif %}
+    {% if not event.is_upcoming %}<span class="chip">This event has ended</span>{% endif %}
+  </p>
+</div></section>
+{% endblock %}

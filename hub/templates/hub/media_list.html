@@ -1,0 +1,13 @@
+{% extends "hub/base.html" %}
+{% block title %}Media · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap"><h1>Media</h1><p class="lede">Talks, demos and short clips from across our channels.</p>
+  <p class="filters" aria-label="Filter by format">
+    <a href="{% url 'hub:media_list' %}" {% if not fmt %}aria-current="true"{% endif %}>All</a>
+    <a href="?format=landscape" {% if fmt == 'landscape' %}aria-current="true"{% endif %}>Landscape</a>
+    <a href="?format=portrait" {% if fmt == 'portrait' %}aria-current="true"{% endif %}>Portrait</a>
+  </p></div></header>
+<section class="section"><div class="wrap">
+  <div class="grid media-grid">{% for m in items %}{% include "hub/_media_card.html" %}{% empty %}<p class="empty">Nothing here yet.</p>{% endfor %}</div>
+</div></section>
+{% endblock %}
