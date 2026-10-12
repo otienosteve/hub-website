@@ -3,7 +3,6 @@
   var menu = document.getElementById('menu');
   var themeToggle = document.querySelector('.theme-toggle');
   var themeIcon = document.querySelector('.theme-toggle__icon');
-  var themeText = document.querySelector('.theme-toggle__text');
   var storageKey = 'agentic-ai-theme';
 
   function applyTheme(theme) {
@@ -17,10 +16,6 @@
 
     if (themeIcon) {
       themeIcon.textContent = isDark ? '🌙' : '☀️';
-    }
-
-    if (themeText) {
-      themeText.textContent = isDark ? 'Dark' : 'Light';
     }
 
     try {

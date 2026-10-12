@@ -1,2 +1,4 @@
 Django>=5.0,<7.0
 Pillow>=10.0
+dj-database-url>=2.2,<3.0
+psycopg[binary]>=3.1

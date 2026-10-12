@@ -89,12 +89,11 @@ body.theme-dark .menu a:not(.btn):hover { background: rgba(255,255,255,0.04); }
 body.theme-dark .menu a[aria-current="page"] { color: #fff; }
 .nav-toggle { display: none; font: 600 1rem var(--body); background: rgba(17,25,39,.9); border: 1px solid var(--line); border-radius: 999px; padding: .45rem 1rem; box-shadow: 0 8px 18px rgba(7, 12, 20, 0.22); cursor: pointer; color: var(--ink); }
 .theme-toggle {
-  display: inline-flex; align-items: center; gap: .55rem; appearance: none; background: rgba(255,255,255,0.12); border: 1px solid var(--line); border-radius: 999px; color: var(--ink); padding: .5rem .8rem; font: 600 .92rem var(--body); cursor: pointer; transition: transform .12s ease, background .12s ease;
+  display: inline-flex; align-items: center; justify-content: center; appearance: none; background: rgba(255,255,255,0.12); border: 1px solid var(--line); border-radius: 999px; color: var(--ink); width: 2.5rem; height: 2.5rem; padding: .5rem; font: 600 .92rem var(--body); cursor: pointer; transition: transform .12s ease, background .12s ease;
 }
 .theme-toggle:hover { transform: translateY(-1px); }
 body.theme-dark .theme-toggle { background: rgba(17,25,39,.9); }
 .theme-toggle__icon { display: inline-flex; align-items: center; justify-content: center; width: 1.2rem; height: 1.2rem; }
-.theme-toggle__text { display: inline-block; }
 
 /* buttons & links */
 .btn {

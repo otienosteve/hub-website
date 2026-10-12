@@ -15,6 +15,19 @@ python manage.py runserver
 
 Site: http://127.0.0.1:8000/  Admin: http://127.0.0.1:8000/admin/
 
+To use PostgreSQL instead of the local SQLite database, set `POSTGRES_URL` in
+your environment to the PostgreSQL connection URL before running Django
+commands. Keep the URL (including its password) out of source control. On
+Windows PowerShell, set it for the current session with:
+
+```powershell
+$env:POSTGRES_URL = "your-rotated-postgres-connection-url"
+```
+
+Then run `python manage.py migrate` to create the site's tables in PostgreSQL.
+The `supa` query parameter, if present in the URL, is removed before connecting;
+the other connection parameters such as `sslmode` are preserved.
+
 ## What to edit in the admin
 
 | Section | What you add |

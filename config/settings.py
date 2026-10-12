@@ -1,6 +1,9 @@
 """Django settings for the Agentic AI Hub website."""
 import os
 from pathlib import Path
+from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
+
+import dj_database_url
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -53,12 +56,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+POSTGRES_URL = os.environ.get("POSTGRES_URL")
+if POSTGRES_URL:
+    parsed_url = urlsplit(POSTGRES_URL)
+    query_params = parse_qs(parsed_url.query)
+    query_params.pop("supa", None)
+    database_url = urlunsplit(parsed_url._replace(query=urlencode(query_params, doseq=True)))
+    DATABASES = {
+        "default": dj_database_url.parse(
+            database_url,
+            conn_max_age=0,
+            conn_health_checks=True,
+        )
     }
-}
+    DATABASES["default"]["DISABLE_SERVER_SIDE_CURSORS"] = True
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
