@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "dev-only-change-me-31f59e52d4b5cd7add5f3a013818183f90cc50e26354903fda27dc3c6a27bdfabefore-deploying")
-DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "0"
+DEBUG = os.environ.get("DJANGO_DEBUG", "0") == "1"
 ALLOWED_HOSTS = os.environ.get(
     "DJANGO_ALLOWED_HOSTS",
     "localhost,127.0.0.1,hub-website-mu.vercel.app,agenticai-hub.com,www.agenticai-hub.com",
@@ -23,15 +23,15 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "cloudinary_storage",
     "django.contrib.staticfiles",
     "hub",
-    "cloudinary_storage",
     "cloudinary",
 ]
 CLOUDINARY_STORAGE = {
-    "CLOUD_NAME": dhd4mose4,
-    "API_KEY": 687359541221734,
-    "API_SECRET": DhyqoUxpj8qkGCcb4cl4vbWv4ao,
+    "CLOUD_NAME": "dhd4mose4",
+    "API_KEY": "687359541221734",
+    "API_SECRET": "DhyqoUxpj8qkGCcb4cl4vbWv4ao",
 }
 
 STORAGES = {
@@ -47,6 +47,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware"
 ]
 
 ROOT_URLCONF = "config.urls"
