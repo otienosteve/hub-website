@@ -25,8 +25,19 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "hub",
+    "cloudinary_storage",
+    "cloudinary",
 ]
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": dhd4mose4,
+    "API_KEY": 687359541221734,
+    "API_SECRET": DhyqoUxpj8qkGCcb4cl4vbWv4ao,
+}
 
+STORAGES = {
+    "default": {"BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage"},
+    "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
+}
 # DJANGO_DEBUG=0, DJANGO_SECRET_KEY
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
