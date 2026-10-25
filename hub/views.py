@@ -6,9 +6,9 @@ from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
-from .forms import SubscribeForm
-from .models import (AboutSection, BlogPost, CoreValue, Course, Event, MediaItem, Project,
-                     Subscriber, TeamMember)
+from .forms import CourseApplicationForm, SubscribeForm
+from .models import (AboutSection, BlogPost, CoreValue, Course, CourseApplication, Event,
+                     MediaItem, Project, Subscriber, TeamMember)
 
 
 def home(request):
@@ -32,7 +32,30 @@ def course_list(request):
 
 def course_detail(request, slug):
     course = get_object_or_404(Course.objects.prefetch_related("topics"), slug=slug, is_published=True)
-    return render(request, "hub/course_detail.html", {"course": course})
+    return render(request, "hub/course_detail.html", {
+        "course": course,
+        "application_form": CourseApplicationForm(),
+    })
+
+
+@require_POST
+def apply_course(request, slug):
+    course = get_object_or_404(Course, slug=slug, is_published=True)
+    form = CourseApplicationForm(request.POST)
+    if form.is_valid():
+        if not course.payment_url:
+            form.add_error(None, "Applications are temporarily unavailable because the payment page is not configured.")
+        else:
+            application = form.save(commit=False)
+            application.course = course
+            application.save()
+            return redirect(course.payment_url)
+
+    return render(request, "hub/course_detail.html", {
+        "course": course,
+        "application_form": form,
+        "application_modal_open": True,
+    })
 
 
 def event_list(request):

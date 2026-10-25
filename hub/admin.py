@@ -4,8 +4,9 @@ from django.contrib import admin
 from django.http import HttpResponse
 from django.utils.html import format_html
 
-from .models import (AboutSection, BlogPost, CoreValue, Course, CourseTopic, Event, EventHighlight,
-                     MediaItem, Project, SiteSettings, Subscriber, TeamMember)
+from .models import (AboutSection, BlogPost, CoreValue, Course, CourseApplication, CourseOutcome,
+                     CourseTopic, Event, EventHighlight, MediaItem, Project, SiteSettings,
+                     Subscriber, TeamMember)
 
 
 def thumb(obj, field, size=44):
@@ -46,20 +47,43 @@ class CourseTopicInline(admin.StackedInline):
     fields = ["title", "description", "order"]
 
 
+class CourseOutcomeInline(admin.StackedInline):
+    model = CourseOutcome
+    extra = 2
+    fields = ["title", "description", "order"]
+
+
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-    list_display = ["title", "duration_display", "next_cohort_date", "is_published", "order"]
+    list_display = ["title", "price", "duration_display", "next_cohort_date", "is_published", "order"]
     list_editable = ["is_published", "order"]
     list_filter = ["is_published"]
     search_fields = ["title", "summary"]
     prepopulated_fields = {"slug": ("title",)}
-    inlines = [CourseTopicInline]
+    inlines = [CourseTopicInline, CourseOutcomeInline]
     fieldsets = [
         (None, {"fields": ["title", "slug", "summary", "cover"]}),
-        ("Schedule", {"fields": ["duration_days", "next_cohort_date", "enrol_url"]}),
+        ("Schedule and pricing", {"fields": ["duration_days", "price", "next_cohort_date", "payment_url"]}),
         ("Prerequisites", {"fields": ["prerequisites"]}),
         ("Publishing", {"fields": ["is_published", "order"]}),
     ]
+
+
+@admin.register(CourseApplication)
+class CourseApplicationAdmin(admin.ModelAdmin):
+    list_display = ["first_name", "last_name", "course", "email", "python_proficiency", "created_at"]
+    list_filter = ["course", "python_proficiency", "created_at"]
+    search_fields = ["first_name", "last_name", "email", "phone_number", "county", "institution_company"]
+    readonly_fields = [
+        "course", "first_name", "last_name", "email", "phone_number", "county",
+        "current_occupation", "institution_company", "python_proficiency", "created_at",
+    ]
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return request.user.is_superuser
 
 
 class EventHighlightInline(admin.TabularInline):

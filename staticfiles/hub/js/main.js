@@ -4,6 +4,23 @@
   var themeToggle = document.querySelector('.theme-toggle');
   var themeIcon = document.querySelector('.theme-toggle__icon');
   var storageKey = 'agentic-ai-theme';
+  var applicationDialog = document.querySelector('.application-dialog');
+
+  document.querySelectorAll('[data-open-application]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (applicationDialog) applicationDialog.showModal();
+    });
+  });
+
+  document.querySelectorAll('[data-close-application]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      if (applicationDialog) applicationDialog.close();
+    });
+  });
+
+  if (applicationDialog && applicationDialog.hasAttribute('data-open-on-load')) {
+    applicationDialog.showModal();
+  }
 
   function applyTheme(theme) {
     var isDark = theme === 'dark';
@@ -38,11 +55,7 @@
       }
     } catch (error) {}
 
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
-
-    return 'light';
+    return 'dark';
   }
 
   if (themeToggle) {

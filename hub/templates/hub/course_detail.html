@@ -12,17 +12,38 @@
     <ol class="topics">
       {% for t in course.topics.all %}<li><h3>{{ t.title }}</h3>{% if t.description %}<p>{{ t.description }}</p>{% endif %}</li>{% empty %}<li><p class="muted">Topics will be added soon.</p></li>{% endfor %}
     </ol>
+    <h2>Course outcomes</h2>
+    <ul class="outcomes">
+      {% for outcome in course.outcomes.all %}
+      <li><h3>{{ outcome.title }}</h3>{% if outcome.description %}<p>{{ outcome.description }}</p>{% endif %}</li>
+      {% empty %}<li class="muted">Course outcomes will be added soon.</li>{% endfor %}
+    </ul>
   </div>
   <aside class="factbox">
     <dl>
+      <dt>Price</dt><dd>KSh {{ course.price_display }}</dd>
       <dt>Duration</dt><dd>{{ course.duration_display }}{% if course.duration_days > 5 %} <span class="muted">({{ course.duration_days }} days)</span>{% endif %}</dd>
       <dt>Next cohort</dt><dd>{% if course.next_cohort_display %}{{ course.next_cohort_display|date:"j F Y" }}{% else %}On request{% endif %}</dd>
       <dt>Prerequisites</dt>
       <dd>{% if course.prerequisite_list %}<ul class="ticks">{% for p in course.prerequisite_list %}<li>{{ p }}</li>{% endfor %}</ul>{% else %}None. Beginners welcome.{% endif %}</dd>
     </dl>
-    {% if course.enrol_url %}<a class="btn" href="{{ course.enrol_url }}" rel="noopener">Enrol now</a>
-    {% elif site.contact_email %}<a class="btn" href="mailto:{{ site.contact_email }}?subject={% if course.next_cohort_display %}Enrolment{% else %}Cohort request{% endif %}: {{ course.title|urlencode }}">{% if course.next_cohort_display %}Enrol now{% else %}Request a cohort{% endif %}</a>
-    {% else %}<a class="btn" href="#join">Get notified</a>{% endif %}
+    <button class="btn" type="button" data-open-application>Apply now</button>
   </aside>
 </div></section>
+<dialog class="application-dialog" aria-labelledby="application-title" {% if application_modal_open %}data-open-on-load{% endif %}>
+  <div class="application-dialog__header">
+    <h2 id="application-title">Apply for {{ course.title }}</h2>
+    <button class="application-dialog__close" type="button" aria-label="Close application form" data-close-application>&times;</button>
+  </div>
+  <form class="application-form" method="post" action="{% url 'hub:apply_course' course.slug %}">
+    {% csrf_token %}
+    {% if application_form.non_field_errors %}<div class="flash flash-error" role="alert">{{ application_form.non_field_errors }}</div>{% endif %}
+    {% for field in application_form %}
+    <label for="{{ field.id_for_label }}">{{ field.label }}{{ field }}
+      {% for error in field.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+    </label>
+    {% endfor %}
+    <button class="btn" type="submit">Submit application and continue to payment</button>
+  </form>
+</dialog>
 {% endblock %}

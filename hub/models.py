@@ -93,13 +93,17 @@ class Course(SluggedModel):
     title = models.CharField(max_length=140)
     summary = models.TextField(help_text="Two or three sentences shown on the course card.")
     cover = models.ImageField(upload_to="courses/", blank=True, help_text="Optional cover image.")
+    price = models.DecimalField(
+        max_digits=10, decimal_places=2, default=0,
+        help_text="Course price in Kenyan shillings (KES).")
     duration_days = models.PositiveIntegerField(
         help_text="Length in training days. Shown as weeks (5 days = 1 week) when longer than 5 days.")
     prerequisites = models.TextField(blank=True, help_text="One prerequisite per line. Leave blank if none.")
     next_cohort_date = models.DateField(null=True, blank=True,
                                         help_text="Leave blank to show “On request”.")
-    enrol_url = models.URLField("Enrolment link", blank=True,
-                                help_text="Optional. Where the Enrol button sends people. Defaults to the contact email.")
+    payment_url = models.URLField(
+        "Payment page URL", blank=True,
+        help_text="Applicants are sent here after submitting the application form.")
     is_published = models.BooleanField(default=True)
     order = models.PositiveIntegerField(default=0, help_text="Lower numbers appear first.")
 
@@ -111,6 +115,10 @@ class Course(SluggedModel):
 
     def get_absolute_url(self):
         return reverse("hub:course_detail", args=[self.slug])
+
+    @property
+    def price_display(self):
+        return f"{self.price:,.2f}"
 
     @property
     def duration_display(self):
@@ -142,6 +150,47 @@ class CourseTopic(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CourseOutcome(models.Model):
+    course = models.ForeignKey(Course, related_name="outcomes", on_delete=models.CASCADE)
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+        verbose_name = "course outcome"
+        verbose_name_plural = "course outcomes"
+
+    def __str__(self):
+        return self.title
+
+
+class CourseApplication(models.Model):
+    class PythonProficiency(models.TextChoices):
+        BEGINNER = "beginner", "Beginner"
+        INTERMEDIATE = "intermediate", "Intermediate"
+        EXPERT = "expert", "Expert"
+
+    course = models.ForeignKey(Course, related_name="applications", on_delete=models.PROTECT)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField()
+    phone_number = models.CharField(max_length=40)
+    county = models.CharField("County of residence", max_length=100)
+    current_occupation = models.CharField(max_length=160)
+    institution_company = models.CharField("Institution / company", max_length=160)
+    python_proficiency = models.CharField(max_length=20, choices=PythonProficiency.choices)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "course application"
+        verbose_name_plural = "course applications"
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name} — {self.course.title}"
 
 
 # --------------------------------------------------------------------------- events

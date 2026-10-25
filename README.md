@@ -33,7 +33,8 @@ the other connection parameters such as `sslmode` are preserved.
 | Section | What you add |
 |---|---|
 | **Site settings** | Banner headline and image, organisation story, mission, vision, contact details, social links |
-| **Courses** | Name, duration in days (shows as weeks above 5 days: 5 days = 1 week, rounded up), prerequisites (one per line), topics with descriptions (added underneath the course), next cohort date (blank or past shows "On request") |
+| **Courses** | Name, summary, price in KES, duration, prerequisites, topics, and course outcomes. Add the payment page URL for each course; applicants are redirected there after submitting the Apply now form. |
+| **Course applications** | Review applicant details and Python proficiency from the admin. Applications are recorded before redirecting to the course payment page. |
 | **Events** | Title, description, tags (comma separated), date, location, highlights (bullet points), banner and small photo |
 | **Blog posts** | Title, date, author, description, content (blank line = new paragraph, `## ` = sub-heading), banner |
 | **Media items** | Name, description, portrait or landscape, platform, video link, cover image. Tick Featured to show on the home page. YouTube and Vimeo links play on the page |
