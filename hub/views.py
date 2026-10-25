@@ -1,4 +1,8 @@
+import logging
+from smtplib import SMTPException
+
 from django.contrib import messages
+from django.core.mail import send_mail
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -9,6 +13,8 @@ from django.views.decorators.http import require_POST
 from .forms import CourseApplicationForm, SubscribeForm
 from .models import (AboutSection, BlogPost, CoreValue, Course, CourseApplication, Event,
                      MediaItem, Project, Subscriber, TeamMember)
+
+logger = logging.getLogger(__name__)
 
 
 def home(request):
@@ -48,8 +54,38 @@ def apply_course(request, slug):
         else:
             application = form.save(commit=False)
             application.course = course
-            application.save()
-            return redirect(course.payment_url)
+            subject = f"Payment information for {course.title}"
+            message = (
+                f"Hello {application.first_name},\n\n"
+                f"Thank you for applying for {course.title}.\n"
+                f"Course fee: KSh {course.price_display}\n\n"
+                f"To continue, complete your payment here:\n{course.payment_url}\n\n"
+                "We look forward to welcoming you.\n"
+            )
+            try:
+                sent_count = send_mail(
+                    subject,
+                    message,
+                    None,
+                    [application.email],
+                    fail_silently=False,
+                )
+            except (OSError, SMTPException):
+                logger.exception("Could not send course payment email for course %s", course.pk)
+                form.add_error(
+                    None,
+                    "We couldn't send the payment email, so your application was not submitted. "
+                    "Please try again later.",
+                )
+            else:
+                if sent_count:
+                    application.save()
+                    return redirect(course.payment_url)
+                form.add_error(
+                    None,
+                    "We couldn't send the payment email, so your application was not submitted. "
+                    "Please try again later.",
+                )
 
     return render(request, "hub/course_detail.html", {
         "course": course,

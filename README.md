@@ -28,6 +28,30 @@ Then run `python manage.py migrate` to create the site's tables in PostgreSQL.
 The `supa` query parameter, if present in the URL, is removed before connecting;
 the other connection parameters such as `sslmode` are preserved.
 
+### Course application email
+
+After an applicant submits the form, the site emails the payment link and
+course fee to the applicant before saving the application and redirecting them
+to the payment page. Configure your **outgoing SMTP** provider with these
+environment variables:
+
+```text
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_HOST_USER=your-sending-address@example.com
+EMAIL_HOST_PASSWORD=your-smtp-password
+EMAIL_USE_TLS=true
+EMAIL_USE_SSL=false
+DEFAULT_FROM_EMAIL=your-sending-address@example.com
+```
+
+Use the SMTP hostname and port provided by your email provider. For implicit
+TLS (commonly port 465), set `EMAIL_USE_SSL=true` and `EMAIL_USE_TLS=false`.
+Incoming IMAP/POP server details are not needed because the website only sends
+email. Keep the SMTP password in the deployment environment or an ignored
+`.env` file; never commit it. If email delivery fails, the applicant sees an
+error and the application is not saved.
+
 ## What to edit in the admin
 
 | Section | What you add |

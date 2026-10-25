@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+from django.core import mail
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
@@ -50,10 +53,27 @@ class CourseApplicationTests(TestCase):
         )
 
         self.assertRedirects(response, self.course.payment_url, fetch_redirect_response=False)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["ada@example.com"])
+        self.assertIn(self.course.payment_url, mail.outbox[0].body)
+        self.assertIn("KSh 15,000.00", mail.outbox[0].body)
         application = CourseApplication.objects.get()
         self.assertEqual(application.course, self.course)
         self.assertEqual(application.email, "ada@example.com")
         self.assertEqual(application.python_proficiency, "intermediate")
+
+    @patch("hub.views.send_mail", side_effect=OSError("SMTP unavailable"))
+    def test_application_is_not_saved_when_payment_email_cannot_be_sent(self, send_mail_mock):
+        response = self.client.post(
+            reverse("hub:apply_course", args=[self.course.slug]),
+            self.application_data(),
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "application was not submitted")
+        self.assertContains(response, "data-open-on-load")
+        self.assertEqual(CourseApplication.objects.count(), 0)
+        send_mail_mock.assert_called_once()
 
     def test_application_requires_a_configured_payment_page(self):
         self.course.payment_url = ""
