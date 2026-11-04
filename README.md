@@ -52,6 +52,14 @@ email. Keep the SMTP password in the deployment environment or an ignored
 `.env` file; never commit it. If email delivery fails, the applicant sees an
 error and the application is not saved.
 
+### Email notification for page visits
+
+To receive an email for every successful public HTML page load, set
+`VISIT_NOTIFICATION_EMAIL` to the address that should receive alerts. This
+uses the outgoing SMTP settings above. Alerts exclude admin pages, non-HTML
+requests, and responses that do not return HTTP 200; each qualifying page load
+sends a separate email, so busy sites may generate many messages.
+
 ## What to edit in the admin
 
 | Section | What you add |

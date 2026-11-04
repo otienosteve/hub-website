@@ -8,6 +8,25 @@ from django.urls import reverse
 from .models import Course, CourseApplication, CourseOutcome
 
 
+@override_settings(
+    VISIT_NOTIFICATION_EMAIL="owner@example.com",
+    EMAIL_BACKEND="django.core.mail.backends.locmem.EmailBackend",
+)
+class VisitNotificationTests(TestCase):
+    def test_sends_email_for_successful_html_page_load(self):
+        response = self.client.get(reverse("hub:home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, ["owner@example.com"])
+        self.assertIn("/", mail.outbox[0].body)
+
+    def test_does_not_send_email_for_admin_page(self):
+        self.client.get("/admin/")
+
+        self.assertEqual(mail.outbox, [])
+
+
 @override_settings(STORAGES={
     "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
     "staticfiles": {"BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage"},
