@@ -74,7 +74,7 @@ sends a separate email, so busy sites may generate many messages.
 | **Team members, Core values, Other about-page sections** | The About page |
 | **Subscribers** | Newsletter and membership sign-ups, with a CSV export action |
 
-Events are listed earliest first, with upcoming events above past events.
+Upcoming events are listed earliest first, followed by past events from newest to oldest. Event cards include the year in their dates.
 
 ## Deploying
 Set `DJANGO_DEBUG=0`, `DJANGO_SECRET_KEY`, `DJANGO_ALLOWED_HOSTS`, run `collectstatic`, and serve `/media/` (uploads) from your web server or storage.

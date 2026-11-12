@@ -95,11 +95,12 @@ def apply_course(request, slug):
 
 
 def event_list(request):
-    # Chronological (earliest first). Upcoming events come first, then past events.
+    # Upcoming events are earliest first; past events are newest first.
     events = Event.objects.filter(is_published=True).order_by("date")
     now = timezone.now()
     upcoming = [e for e in events if (e.end_date or e.date) >= now]
     past = [e for e in events if (e.end_date or e.date) < now]
+    past.reverse()
     return render(request, "hub/event_list.html", {"upcoming": upcoming, "past": past})
 
 

@@ -1,11 +1,13 @@
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.core import mail
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.urls import reverse
+from django.utils import timezone
 
-from .models import Course, CourseApplication, CourseOutcome
+from .models import Course, CourseApplication, CourseOutcome, Event
 
 
 @override_settings(
@@ -25,6 +27,29 @@ class VisitNotificationTests(TestCase):
         self.client.get("/admin/")
 
         self.assertEqual(mail.outbox, [])
+
+
+class EventListTests(TestCase):
+    def test_past_events_are_newest_first_and_dates_include_the_year(self):
+        now = timezone.now()
+        older = Event.objects.create(
+            title="Older event",
+            description="An earlier event.",
+            date=now - timedelta(days=10),
+        )
+        newer = Event.objects.create(
+            title="Newer event",
+            description="A more recent event.",
+            date=now - timedelta(days=2),
+        )
+
+        response = self.client.get(reverse("hub:event_list"))
+
+        self.assertEqual(
+            [event.title for event in response.context["past"]],
+            [newer.title, older.title],
+        )
+        self.assertContains(response, f"{newer.date.year},")
 
 
 @override_settings(STORAGES={

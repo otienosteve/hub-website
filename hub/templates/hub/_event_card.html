@@ -5,7 +5,7 @@
   </div>
   <div class="card-body">
     <h3><a href="{{ e.get_absolute_url }}">{{ e.title }}</a></h3>
-    <p class="muted">{{ e.date|date:"D j M, g:i A" }}{% if e.location %} &middot; {{ e.location }}{% endif %}</p>
+    <p class="muted">{{ e.date|date:"D j M Y, g:i A" }}{% if e.location %} &middot; {{ e.location }}{% endif %}</p>
     <p>{{ e.description|truncatewords:22 }}</p>
     {% if e.tag_list %}<p class="chips">{% for t in e.tag_list %}<span class="chip chip-soft">{{ t }}</span>{% endfor %}</p>{% endif %}
     <a class="link" href="{{ e.get_absolute_url }}">View event</a>
