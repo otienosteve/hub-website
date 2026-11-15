@@ -64,7 +64,7 @@ sends a separate email, so busy sites may generate many messages.
 
 | Section | What you add |
 |---|---|
-| **Site settings** | Banner headline and image, organisation story, mission, vision, contact details, social links |
+| **Site settings** | Banner headline and image, organisation story, mission, vision, contact details, social links, WhatsApp group invite |
 | **Courses** | Name, summary, price in KES, duration, prerequisites, topics, and course outcomes. Add the payment page URL for each course; applicants are redirected there after submitting the Apply now form. |
 | **Course applications** | Review applicant details and Python proficiency from the admin. Applications are recorded before redirecting to the course payment page. |
 | **Events** | Title, description, tags (comma separated), date, location, highlights (bullet points), banner and small photo |

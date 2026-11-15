@@ -7,7 +7,7 @@ from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Course, CourseApplication, CourseOutcome, Event, LegalDocument
+from .models import Course, CourseApplication, CourseOutcome, Event, LegalDocument, SiteSettings
 
 
 @override_settings(
@@ -95,6 +95,20 @@ class LegalDocumentTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
+
+
+class CommunityLinksTests(TestCase):
+    def test_join_section_displays_configured_whatsapp_and_linkedin_links(self):
+        site = SiteSettings.load()
+        site.linkedin_url = "https://www.linkedin.com/company/agentic-ai-hub/"
+        site.save()
+
+        response = self.client.get(reverse("hub:home"))
+
+        self.assertContains(response, 'href="https://chat.whatsapp.com/FEDKms5VPRL7OTxiJDMqBI"')
+        self.assertContains(response, "Join us on WhatsApp")
+        self.assertContains(response, 'href="https://www.linkedin.com/company/agentic-ai-hub/"')
+        self.assertContains(response, "Connect on LinkedIn")
 
 
 @override_settings(STORAGES={

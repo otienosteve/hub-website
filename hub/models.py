@@ -56,6 +56,11 @@ class SiteSettings(models.Model):
     location = models.CharField(max_length=120, blank=True)
 
     linkedin_url = models.URLField(blank=True)
+    whatsapp_group_url = models.URLField(
+        "WhatsApp group invite URL",
+        blank=True,
+        default="https://chat.whatsapp.com/FEDKms5VPRL7OTxiJDMqBI",
+    )
     x_url = models.URLField("X / Twitter URL", blank=True)
     youtube_url = models.URLField("YouTube URL", blank=True)
     github_url = models.URLField("GitHub URL", blank=True)

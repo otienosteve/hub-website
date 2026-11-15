@@ -25,7 +25,9 @@ class SiteSettingsAdmin(admin.ModelAdmin):
         ("Our story (home page)", {"fields": ["story_title", "story"]}),
         ("About page", {"fields": ["mission", "vision"]}),
         ("Contact", {"fields": ["contact_email", "phone", "location"]}),
-        ("Social links", {"fields": ["linkedin_url", "x_url", "youtube_url", "github_url", "instagram_url"]}),
+        ("Social links", {"fields": [
+            "linkedin_url", "whatsapp_group_url", "x_url", "youtube_url", "github_url", "instagram_url",
+        ]}),
     ]
 
     def has_add_permission(self, request):
