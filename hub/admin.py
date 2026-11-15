@@ -5,8 +5,8 @@ from django.http import HttpResponse
 from django.utils.html import format_html
 
 from .models import (AboutSection, BlogPost, CoreValue, Course, CourseApplication, CourseOutcome,
-                     CourseTopic, Event, EventHighlight, MediaItem, Project, SiteSettings,
-                     Subscriber, TeamMember)
+                     CourseTopic, Event, EventHighlight, LegalDocument, MediaItem, Project,
+                     SiteSettings, Subscriber, TeamMember)
 
 
 def thumb(obj, field, size=44):
@@ -159,6 +159,14 @@ admin.site.register(CoreValue, type("CoreValueAdmin", (admin.ModelAdmin,), {
     "list_display": ["title", "order"], "list_editable": ["order"]}))
 admin.site.register(AboutSection, type("AboutSectionAdmin", (admin.ModelAdmin,), {
     "list_display": ["title", "order"], "list_editable": ["order"]}))
+
+
+@admin.register(LegalDocument)
+class LegalDocumentAdmin(admin.ModelAdmin):
+    list_display = ["title", "key", "updated_at"]
+    list_filter = ["key"]
+    search_fields = ["title", "content"]
+    readonly_fields = ["updated_at"]
 
 
 @admin.register(Subscriber)

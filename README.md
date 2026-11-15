@@ -73,6 +73,7 @@ sends a separate email, so busy sites may generate many messages.
 | **Projects** | Portfolio entries |
 | **Team members, Core values, Other about-page sections** | The About page |
 | **Subscribers** | Newsletter and membership sign-ups, with a CSV export action |
+| **Legal documents** | Edit the privacy policy and terms of use shown from the footer |
 
 Upcoming events are listed earliest first, followed by past events from newest to oldest. Event cards include the year in their dates.
 

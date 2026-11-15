@@ -7,7 +7,7 @@ from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Course, CourseApplication, CourseOutcome, Event
+from .models import Course, CourseApplication, CourseOutcome, Event, LegalDocument
 
 
 @override_settings(
@@ -50,6 +50,51 @@ class EventListTests(TestCase):
             [newer.title, older.title],
         )
         self.assertContains(response, f"{newer.date.year},")
+
+
+class LegalDocumentTests(TestCase):
+    def setUp(self):
+        self.document = LegalDocument.objects.get(key=LegalDocument.Key.PRIVACY_POLICY)
+        self.document.title = "Privacy Policy"
+        self.document.content = "## Information\n\nWe handle submitted details with care."
+        self.document.save()
+
+    def test_footer_links_open_documents_and_json_endpoint_returns_database_content(self):
+        response = self.client.get(reverse("hub:home"))
+
+        self.assertContains(response, 'data-legal-document')
+        self.assertContains(response, "Privacy policy")
+        self.assertContains(response, "Terms of use")
+        self.assertTrue(LegalDocument.objects.filter(key=LegalDocument.Key.TERMS_OF_USE).exists())
+
+        response = self.client.get(
+            reverse("hub:legal_document", args=[self.document.key]),
+            HTTP_ACCEPT="application/json",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json()["title"], self.document.title)
+        self.assertEqual(
+            response.json()["blocks"],
+            [
+                {"kind": "h2", "text": "Information"},
+                {"kind": "p", "text": "We handle submitted details with care."},
+            ],
+        )
+
+    def test_document_page_is_available_without_javascript(self):
+        response = self.client.get(reverse("hub:legal_document", args=[self.document.key]))
+
+        self.assertContains(response, "Privacy Policy")
+        self.assertContains(response, "We handle submitted details with care.")
+
+    def test_unknown_legal_document_returns_not_found(self):
+        response = self.client.get(
+            reverse("hub:legal_document", args=["unknown-document"]),
+            HTTP_ACCEPT="application/json",
+        )
+
+        self.assertEqual(response.status_code, 404)
 
 
 @override_settings(STORAGES={

@@ -13,6 +13,7 @@ urlpatterns = [
     path("events/", views.event_list, name="event_list"),
     path("events/<slug:slug>/", views.event_detail, name="event_detail"),
     path("about/", views.about, name="about"),
+    path("legal/<slug:key>/", views.legal_document, name="legal_document"),
     path("portfolio/", views.portfolio, name="portfolio"),
     path("media/", views.media_list, name="media_list"),
     path("media/<int:pk>/", views.media_detail, name="media_detail"),

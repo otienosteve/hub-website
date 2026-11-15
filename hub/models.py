@@ -88,6 +88,39 @@ class SiteSettings(models.Model):
         return [(n, u) for n, u in pairs if u]
 
 
+class LegalDocument(models.Model):
+    class Key(models.TextChoices):
+        PRIVACY_POLICY = "privacy-policy", "Privacy policy"
+        TERMS_OF_USE = "terms-of-use", "Terms of use"
+
+    key = models.CharField(max_length=40, choices=Key.choices, unique=True)
+    title = models.CharField(max_length=120)
+    content = models.TextField(help_text="Use blank lines between paragraphs and start headings with ##.")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["key"]
+        verbose_name = "legal document"
+        verbose_name_plural = "legal documents"
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def blocks(self):
+        """Split plain-text content into safe-to-render paragraphs and headings."""
+        out = []
+        for raw in re.split(r"\n\s*\n", self.content.strip()):
+            raw = raw.strip()
+            if not raw:
+                continue
+            if raw.startswith("## "):
+                out.append(("h2", raw[3:].strip()))
+            else:
+                out.append(("p", raw))
+        return out
+
+
 # --------------------------------------------------------------------------- courses
 class Course(SluggedModel):
     title = models.CharField(max_length=140)

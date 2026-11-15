@@ -1,0 +1,13 @@
+{% extends "hub/base.html" %}
+{% block title %}{{ document.title }} · {{ site.org_name }}{% endblock %}
+{% block content %}
+<header class="page-head"><div class="wrap">
+  <h1>{{ document.title }}</h1>
+  <p class="muted">Last updated {{ document.updated_at|date:"F j, Y" }}</p>
+</div></header>
+<section class="section"><article class="wrap narrow prose article">
+  {% for kind, text in document.blocks %}
+    {% if kind == "h2" %}<h2>{{ text }}</h2>{% else %}<p>{{ text }}</p>{% endif %}
+  {% endfor %}
+</article></section>
+{% endblock %}

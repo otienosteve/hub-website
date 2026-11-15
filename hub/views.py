@@ -3,7 +3,7 @@ from smtplib import SMTPException
 
 from django.contrib import messages
 from django.core.mail import send_mail
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 
 from .forms import CourseApplicationForm, SubscribeForm
 from .models import (AboutSection, BlogPost, CoreValue, Course, CourseApplication, Event,
-                     MediaItem, Project, Subscriber, TeamMember)
+                     LegalDocument, MediaItem, Project, Subscriber, TeamMember)
 
 logger = logging.getLogger(__name__)
 
@@ -144,6 +144,17 @@ def about(request):
         "team": TeamMember.objects.all(),
         "sections": AboutSection.objects.all(),
     })
+
+
+def legal_document(request, key):
+    document = get_object_or_404(LegalDocument, key=key)
+    if request.headers.get("Accept", "").startswith("application/json"):
+        return JsonResponse({
+            "title": document.title,
+            "blocks": [{"kind": kind, "text": text} for kind, text in document.blocks],
+            "updated_at": document.updated_at.isoformat(),
+        })
+    return render(request, "hub/legal_document.html", {"document": document})
 
 
 @require_POST
