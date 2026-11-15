@@ -305,9 +305,12 @@ body.theme-dark .section-white .card { background: rgba(14, 21, 32, 0.9); }
 .join h2 { color: #fff; }
 .join-copy p { color: #e5f1ff; font-size: 1.15rem; max-width: 30em; }
 .join-socials { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; margin-top: 1.25rem; }
-.join-social-link { display: inline-flex; align-items: center; gap: .35rem; font-size: .75rem; font-weight: 700; text-decoration: none; }
+.join-social-link {
+  display: inline-flex; align-items: center; gap: .5rem; min-height: 3.25rem; padding: .5rem .75rem;
+  font-size: .96rem; font-weight: 700; text-decoration: none;
+}
 .join-social-link:hover { text-decoration: underline; text-underline-offset: .2em; }
-.join-social-link svg { width: 1.1rem; height: 1.1rem; flex: 0 0 auto; }
+.join-social-link svg { width: 1.55rem; height: 1.55rem; flex: 0 0 auto; }
 .join-form {
   background: rgba(9, 17, 28, 0.86); color: var(--ink); border: 1px solid rgba(177,214,255,0.12); border-radius: 20px;
   box-shadow: 0 18px 34px rgba(7,12,20,0.26); padding: 1.5rem; display: grid; gap: 1rem;
